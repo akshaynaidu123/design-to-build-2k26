@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Prevent caching issues -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- App Title -->
+    <title>Design to Build Challenge</title>
+
+    <!-- SEO -->
+    <meta
+      name="description"
+      content="Hackathon 2K26 — National-level hackathon organized by the Department of Artificial Intelligence and Machine Learning, Swarnandhra College of Engineering and Technology. March 17–18, 2026."
+    />
+    <meta
+      name="author"
+      content="Swarnandhra College of Engineering and Technology"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Hackathon 2K26 | SCET" />
+    <meta
+      property="og:description"
+      content="National-level hackathon organized by the Department of AI & ML, Swarnandhra College of Engineering and Technology."
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- ================= FAVICON FEATURE (NEW) ================= -->
+
+    <!-- Default favicon -->
+    <link
+      id="dynamic-favicon"
+      rel="icon"
+      type="image/png"
+      href="/favicon/logo1.png"
+    />
+
+    <script>
+      const favicons = [
+        "/favicon/logo1.png",
+        "/favicon/logo2.png",
+        "/favicon/logo3.png"
+      ];
+
+      let currentIndex = 0;
+
+      window.addEventListener("load", () => {
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % favicons.length;
+
+          const favicon = document.getElementById("dynamic-favicon");
+
+          if (favicon) {
+            favicon.setAttribute("href", favicons[currentIndex]);
+          }
+        }, 5000); // change every 5 seconds
+      });
+    </script>
+
+    <!-- ========================================================== -->
+
+  </head>
+
+  <body style="margin: 0; background: #000;">
+
+    <!-- React Root -->
+    <div id="root"></div>
+
+    <!-- React Entry -->
+    <script type="module" src="/src/main.tsx"></script>
+
+  </body>
+</html>

@@ -1,0 +1,129 @@
+/* ============================= */
+/* 🌌 FUTURISTIC AI TECH THEME  */
+/* ============================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================= */
+/* 🎨 COLOR VARIABLES            */
+/* ============================= */
+
+:root {
+  --background: 220 50% 8%;
+  --foreground: 200 100% 95%;
+
+  --primary: 185 100% 50%;
+  --primary-foreground: 220 50% 8%;
+
+  --secondary: 275 100% 60%;
+  --secondary-foreground: 220 50% 8%;
+
+  --card: 220 45% 12%;
+  --card-foreground: 200 100% 95%;
+
+  --muted: 210 30% 20%;
+  --muted-foreground: 200 60% 70%;
+
+  --border: 200 100% 20%;
+}
+
+/* ============================= */
+/* 🌌 BODY BACKGROUND            */
+/* ============================= */
+
+body {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.06), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(179, 0, 255, 0.05), transparent 40%),
+    hsl(var(--background));
+
+  color: hsl(var(--foreground));
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ============================= */
+/* ⚡ GLOW UTILITIES              */
+/* ============================= */
+
+.text-glow {
+  text-shadow:
+    0 0 8px rgba(0, 247, 255, 0.6),
+    0 0 16px rgba(0, 247, 255, 0.4);
+}
+
+.text-glow-purple {
+  text-shadow:
+    0 0 8px rgba(179, 0, 255, 0.6),
+    0 0 16px rgba(179, 0, 255, 0.4);
+}
+
+.border-glow {
+  box-shadow:
+    0 0 10px rgba(0, 247, 255, 0.4),
+    0 0 20px rgba(0, 247, 255, 0.2);
+}
+
+/* ============================= */
+/* 💎 GLASS CARD STYLE           */
+/* ============================= */
+
+.glass-card {
+  background: rgba(10, 20, 40, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 247, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 247, 255, 0.15);
+  transition: all 0.4s ease;
+}
+
+.glass-card:hover {
+  box-shadow:
+    0 0 25px rgba(0, 247, 255, 0.4),
+    0 0 60px rgba(85, 7, 221, 0.73);
+  transform: translateY(-4px);
+}
+
+/* ============================= */
+/* 🔄 SUBTLE CYBER ANIMATION     */
+/* ============================= */
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 10px rgba(0, 247, 255, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(0, 247, 255, 0.6); }
+  100% { box-shadow: 0 0 10px rgba(0, 247, 255, 0.2); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+/* ============================= */
+/* 🌐 SCROLLBAR THEME            */
+/* ============================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0f1f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #00f7ff, #b300ff);
+  border-radius: 10px;
+}
+
+/* ============================= */
+/* 🧠 SELECTION COLOR            */
+/* ============================= */
+
+::selection {
+  background: rgba(0, 247, 255, 0.3);
+  color: white;
+}
+
