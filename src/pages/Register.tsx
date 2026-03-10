@@ -5,13 +5,20 @@ import { useNavigate } from "react-router-dom";
 const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxmmvfii02mY1c8rPpR4aykE3bI-s6AjiUWpvnjm0h67q0wxkPgusiR4EkrxnLUvqa5Pw/exec";
 
+type Member = {
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  tshirt: string;
+};
+
 export default function Register() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
-  // ✅ Team leader + max 4 members = 5 total
+  const [loading, setLoading] = useState(false);
   const [teamSize, setTeamSize] = useState(1);
-  const [members, setMembers] = useState<string[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
 
   const [paymentScreenshot, setPaymentScreenshot] = useState("");
   const [paymentType, setPaymentType] = useState("");
@@ -29,12 +36,11 @@ export default function Register() {
     utrId: "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ MAX TEAM SIZE LOGIC (Leader included)
-  const handleTeamSizeChange = (e: any) => {
+  const handleTeamSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let size = Number(e.target.value);
 
     if (size > 5) size = 5;
@@ -42,19 +48,34 @@ export default function Register() {
 
     setTeamSize(size);
 
-    // Members = total - 1 (exclude leader)
     const memberCount = size - 1;
-    setMembers(Array(memberCount).fill(""));
+    const arr: Member[] = [];
+
+    for (let i = 0; i < memberCount; i++) {
+      arr.push({
+        name: "",
+        email: "",
+        phone: "",
+        role: "",
+        tshirt: "",
+      });
+    }
+
+    setMembers(arr);
   };
 
-  const handleMemberChange = (index: number, value: string) => {
+  const handleMemberChange = (
+    index: number,
+    field: keyof Member,
+    value: string
+  ) => {
     const updated = [...members];
-    updated[index] = value;
+    updated[index][field] = value;
     setMembers(updated);
   };
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setPaymentType(file.type);
@@ -67,16 +88,37 @@ export default function Register() {
     };
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     const payload = {
       ...formData,
-      member1: members[0] || "",
-      member2: members[1] || "",
-      member3: members[2] || "",
-      member4: members[3] || "",
+
+      member1: members[0]?.name || "",
+      member1Email: members[0]?.email || "",
+      member1Phone: members[0]?.phone || "",
+      member1Role: members[0]?.role || "",
+      member1Tshirt: members[0]?.tshirt || "",
+
+      member2: members[1]?.name || "",
+      member2Email: members[1]?.email || "",
+      member2Phone: members[1]?.phone || "",
+      member2Role: members[1]?.role || "",
+      member2Tshirt: members[1]?.tshirt || "",
+
+      member3: members[2]?.name || "",
+      member3Email: members[2]?.email || "",
+      member3Phone: members[2]?.phone || "",
+      member3Role: members[2]?.role || "",
+      member3Tshirt: members[2]?.tshirt || "",
+
+      member4: members[3]?.name || "",
+      member4Email: members[3]?.email || "",
+      member4Phone: members[3]?.phone || "",
+      member4Role: members[3]?.role || "",
+      member4Tshirt: members[3]?.tshirt || "",
+
       paymentScreenshot,
       paymentType,
     };
@@ -93,7 +135,7 @@ export default function Register() {
         alert(`🎉 Registered Successfully!\nTeam ID: ${result.teamId}`);
         navigate("/");
       } else if (result.message === "Duplicate UTR") {
-        alert("❌ This UTR ID has already been used. Please check your payment details.");
+        alert("❌ This UTR ID already used");
       } else {
         alert("❌ Submission failed");
       }
@@ -117,7 +159,8 @@ export default function Register() {
           Team Registration
         </h2>
 
-        {/* FORM FIELDS */}
+        {/* Leader Details */}
+
         <div className="grid md:grid-cols-3 gap-6">
           <Input name="teamName" placeholder="Team Name" onChange={handleChange} />
           <Input name="leaderName" placeholder="Team Leader Name" onChange={handleChange} />
@@ -129,7 +172,6 @@ export default function Register() {
           <Input name="year" placeholder="Year of Study" onChange={handleChange} />
           <Input name="branch" placeholder="Branch" onChange={handleChange} />
 
-          {/* Team Size (Max 5 including leader) */}
           <Input
             type="number"
             placeholder="Total Team Size (Max 5 including Leader)"
@@ -137,37 +179,71 @@ export default function Register() {
           />
         </div>
 
-        {/* MEMBERS SECTION */}
-        {members.length > 0 && (
-          <div className="mt-8">
-            <h3 className="text-cyan-300 mb-4 text-lg font-semibold">
-              Team Members (Max 4)
-            </h3>
+        {/* Members */}
 
-            <div className="grid md:grid-cols-2 gap-4">
-              {members.map((member, index) => (
-                <motion.input
-                  key={index}
-                  whileFocus={{ scale: 1.02 }}
-                  placeholder={`Member ${index + 1} Name`}
-                  value={member}
-                  required
-                  onChange={(e) => handleMemberChange(index, e.target.value)}
-                  className="p-4 bg-black/30 border border-cyan-400/30 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
-                />
-              ))}
-            </div>
+        {members.length > 0 && (
+          <div className="mt-10 space-y-6">
+            {members.map((member, index) => (
+              <div key={index} className="border border-cyan-400/20 p-6 rounded-xl">
+                <h4 className="text-cyan-400 mb-4">Member {index + 1}</h4>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Input
+                    placeholder="Member Name"
+                    onChange={(e) =>
+                      handleMemberChange(index, "name", e.target.value)
+                    }
+                  />
+
+                  <Input
+                    type="email"
+                    placeholder="Member Email"
+                    onChange={(e) =>
+                      handleMemberChange(index, "email", e.target.value)
+                    }
+                  />
+
+                  <Input
+                    placeholder="Member Phone"
+                    onChange={(e) =>
+                      handleMemberChange(index, "phone", e.target.value)
+                    }
+                  />
+
+                  <Input
+                    placeholder="Role"
+                    onChange={(e) =>
+                      handleMemberChange(index, "role", e.target.value)
+                    }
+                  />
+
+                  <select
+                    onChange={(e) =>
+                      handleMemberChange(index, "tshirt", e.target.value)
+                    }
+                    className="p-4 bg-black/30 border border-cyan-400/30 rounded-lg text-white"
+                  >
+                    <option value="">T-Shirt Size</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                    <option>XXL</option>
+                  </select>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
-        {/* PAYMENT SECTION (UNCHANGED STRUCTURE) */}
+        {/* Payment Section */}
+
         <div className="mt-12 border-t border-cyan-400/30 pt-10">
           <h3 className="text-2xl text-cyan-400 font-bold mb-10 text-center">
             Registration Fee Payment
           </h3>
 
           <div className="flex flex-col md:flex-row gap-12 items-start">
-
             <div className="flex-1 flex justify-center">
               <div className="bg-white p-6 rounded-2xl shadow-xl">
                 <img
@@ -178,12 +254,15 @@ export default function Register() {
               </div>
             </div>
 
-            <div className="flex-1 text-gray-300 space-y-5 bg-[#0f172a] border border-cyan-400/20 p-8 rounded-xl">
+            <div className="flex-1 text-gray-300 space-y-4 bg-[#0f172a] border border-cyan-400/20 p-8 rounded-xl">
               <h4 className="text-xl text-cyan-400 font-semibold">
                 Payment Instructions
               </h4>
+
               <p>• ₹200 per Team – Idea Submission Fee</p>
-              <p>• ₹300 per head – Hackathon Entry Fee (After Screening Selection)</p>
+              <p>
+                • ₹300 per head – Hackathon Entry Fee (After Screening Selection)
+              </p>
               <p>• Scan the QR code using any UPI app.</p>
               <p>• Enter your UTR / Transaction ID below.</p>
               <p>• Upload payment screenshot for verification.</p>
@@ -213,7 +292,7 @@ export default function Register() {
           whileTap={{ scale: 0.95 }}
           disabled={loading}
           type="submit"
-          className="w-full mt-10 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-bold rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(0,255,255,0.7)] transition-all duration-300"
+          className="w-full mt-10 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-bold rounded-xl"
         >
           {loading ? "Submitting..." : "Submit Registration"}
         </motion.button>
@@ -222,7 +301,14 @@ export default function Register() {
   );
 }
 
-function Input({ name, placeholder, type = "text", onChange }: any) {
+type InputProps = {
+  name?: string;
+  placeholder: string;
+  type?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+function Input({ name, placeholder, type = "text", onChange }: InputProps) {
   return (
     <motion.input
       whileFocus={{ scale: 1.02 }}
@@ -231,7 +317,7 @@ function Input({ name, placeholder, type = "text", onChange }: any) {
       placeholder={placeholder}
       required
       onChange={onChange}
-      className="p-4 bg-black/30 border border-cyan-400/30 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
+      className="p-4 bg-black/30 border border-cyan-400/30 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
     />
   );
 }
