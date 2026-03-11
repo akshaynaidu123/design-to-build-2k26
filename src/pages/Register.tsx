@@ -168,13 +168,13 @@ Hackathon Team Registration
 <input name="teamName" placeholder="Team Name" required onChange={handleChange}
 className="input-field"/>
 
-<input name="leaderName" placeholder="Team Leader Name" required onChange={handleChange}
+<input name="leaderName" placeholder="Team Lead Name" required onChange={handleChange}
 className="input-field"/>
 
-<input name="email" placeholder="Leader Email" required onChange={handleChange}
+<input name="email" placeholder="Lead Email" required onChange={handleChange}
 className="input-field"/>
 
-<input name="contactNumber" placeholder="Leader Phone" required onChange={handleChange}
+<input name="contactNumber" placeholder="Lead Phone" required onChange={handleChange}
 className="input-field"/>
 
 <select name="leaderGender" required onChange={handleChange}
